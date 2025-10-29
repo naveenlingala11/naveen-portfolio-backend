@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/likes")
-@CrossOrigin(origins = "http://localhost:4200")
 public class LikeController {
     private final LikeService service;
 
