@@ -34,6 +34,9 @@ public class SecurityConfig {
                 .cors(cors -> {}) // ✅ ENABLE Spring’s CORS support
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/likes/**").permitAll()
+                        .requestMatchers("/api/reviews/**").permitAll()
+                        .requestMatchers("/api/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**","/api/**").permitAll()
                         .requestMatchers("/api/projects/**").hasAuthority("ROLE_ADMIN") // ✅ authority-based
                         .anyRequest().authenticated()
