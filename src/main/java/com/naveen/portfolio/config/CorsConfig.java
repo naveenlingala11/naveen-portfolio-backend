@@ -24,7 +24,7 @@ public class CorsConfig {
 
         if (allowedOrigins == null || allowedOrigins.isBlank()) {
             // ✅ Default fallback
-            origins = List.of("http://localhost:4200", "https://main.d2jl74n1ns19iu.amplifyapp.com");
+            origins = List.of("http://localhost:4200", "https://main.d23jcpnmo2mz28.amplifyapp.com/");
         } else {
             // ✅ Support comma-separated list
             origins = Arrays.stream(allowedOrigins.split(","))
