@@ -1,8 +1,10 @@
 package com.naveen.portfolio.model;
 
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor // ✅ this adds the default constructor automatically
 @Table(name = "user_likes", uniqueConstraints = @UniqueConstraint(columnNames = "userIdentifier"))
 public class Like {
     @Id
@@ -11,7 +13,6 @@ public class Like {
 
     private String userIdentifier; // could be email, IP, or session ID
 
-    public Like() {}
     public Like(String userIdentifier) {
         this.userIdentifier = userIdentifier;
     }
