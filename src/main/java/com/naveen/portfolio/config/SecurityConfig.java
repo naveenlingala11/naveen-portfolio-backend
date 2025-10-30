@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults()) // ✅ enable Spring’s built-in CORS support
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/", "/api/auth/**").permitAll()
                         .requestMatchers("/api/likes/**").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/projects/**","/api/**").permitAll()
                         .requestMatchers("/api/projects/**").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated()
                 )
