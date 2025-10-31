@@ -1,47 +1,35 @@
 package com.naveen.portfolio.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Configuration
 public class CorsConfig {
 
-    @Value("${allowed.origins:}")
-    private String allowedOrigins;
-
     @Bean
     public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-
-        List<String> origins;
-        if (allowedOrigins == null || allowedOrigins.isBlank()) {
-            // ✅ default to dev localhost & your Amplify domain
-            origins = List.of(
-                    "http://localhost:4200",
-                    "https://naveenlingala.online"
-            );
-        } else {
-            origins = Arrays.stream(allowedOrigins.split(","))
-                    .map(String::trim)
-                    .collect(Collectors.toList());
-        }
-
-        config.setAllowedOrigins(origins);
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowCredentials(true);
+        cors.setAllowedOrigins(List.of(
+                "https://www.naveenlingala.online",  // ✅ Production frontend
+                "http://localhost:4200"              // ✅ Local development
+        ));
+        cors.setAllowedHeaders(List.of(
+                "Origin", "Content-Type", "Accept", "Authorization",
+                "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"
+        ));
+        cors.setExposedHeaders(List.of(
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"
+        ));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
+        source.registerCorsConfiguration("/**", cors);
         return new CorsFilter(source);
     }
 }
