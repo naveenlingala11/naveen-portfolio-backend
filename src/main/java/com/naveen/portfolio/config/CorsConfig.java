@@ -26,7 +26,7 @@ public class CorsConfig {
             // ✅ default to dev localhost & your Amplify domain
             origins = List.of(
                     "http://localhost:4200",
-                    "https://main.d23jcpnmo2mz28.amplifyapp.com"
+                    "https://naveenlingala.online"
             );
         } else {
             origins = Arrays.stream(allowedOrigins.split(","))
