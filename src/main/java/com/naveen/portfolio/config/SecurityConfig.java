@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults()) // ✅ enable Spring’s built-in CORS support
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/api/auth/**").permitAll()
+                        .requestMatchers("/", "/api/blogs/**").permitAll()
                         .requestMatchers("/api/likes/**").permitAll()
                         .requestMatchers("/api/reviews/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**","/api/**").permitAll()
