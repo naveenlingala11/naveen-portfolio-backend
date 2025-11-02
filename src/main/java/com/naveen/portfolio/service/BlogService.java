@@ -12,6 +12,9 @@ public class BlogService {
     @Autowired
     private BlogRepository blogRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Blog> getAllBlogs() {
         return blogRepository.findAll();
     }
@@ -21,7 +24,9 @@ public class BlogService {
     }
 
     public Blog createBlog(Blog blog) {
-        return blogRepository.save(blog);
+        Blog saved = blogRepository.save(blog);
+        notificationService.create("🆕 New blog post added: " + saved.getTitle(), "BLOG_CREATED");
+        return saved;
     }
 
     public Blog updateBlog(Long id, Blog updatedBlog) {
@@ -35,20 +40,28 @@ public class BlogService {
                     existing.setShortDescription(updatedBlog.getShortDescription());
                     existing.setTags(updatedBlog.getTags());
                     existing.setFeatured(updatedBlog.isFeatured());
-                    return blogRepository.save(existing);
+                    Blog saved = blogRepository.save(existing);
+                    notificationService.create("✏️ Blog updated: " + saved.getTitle(), "BLOG_UPDATED");
+                    return saved;
                 })
                 .orElse(null);
     }
 
     public void deleteBlog(Long id) {
-        blogRepository.deleteById(id);
+        Blog blog = getBlogById(id);
+        if (blog != null) {
+            blogRepository.deleteById(id);
+            notificationService.create("🗑️ Blog deleted: " + blog.getTitle(), "BLOG_DELETED");
+        }
     }
 
     public Blog likeBlog(Long id) {
         Blog blog = getBlogById(id);
         if (blog != null) {
             blog.setLikes(blog.getLikes() + 1);
-            return blogRepository.save(blog);
+            Blog saved = blogRepository.save(blog);
+            notificationService.create("❤️ Blog liked: " + saved.getTitle(), "BLOG_LIKED");
+            return saved;
         }
         return null;
     }
@@ -57,7 +70,9 @@ public class BlogService {
         Blog blog = getBlogById(id);
         if (blog != null) {
             blog.getComments().add(comment);
-            return blogRepository.save(blog);
+            Blog saved = blogRepository.save(blog);
+            notificationService.create("💬 New comment added to blog: " + saved.getTitle(), "COMMENT_ADDED");
+            return saved;
         }
         return null;
     }
@@ -66,7 +81,9 @@ public class BlogService {
         Blog blog = getBlogById(id);
         if (blog != null && index >= 0 && index < blog.getComments().size()) {
             blog.getComments().remove(index);
-            return blogRepository.save(blog);
+            Blog saved = blogRepository.save(blog);
+            notificationService.create("🧹 Comment deleted from blog: " + saved.getTitle(), "COMMENT_DELETED");
+            return saved;
         }
         return null;
     }
@@ -75,7 +92,9 @@ public class BlogService {
         Blog blog = getBlogById(id);
         if (blog != null) {
             blog.setViews(blog.getViews() + 1);
-            return blogRepository.save(blog);
+            Blog saved = blogRepository.save(blog);
+            notificationService.create("👁️ Blog viewed: " + saved.getTitle(), "BLOG_VIEWED");
+            return saved;
         }
         return null;
     }

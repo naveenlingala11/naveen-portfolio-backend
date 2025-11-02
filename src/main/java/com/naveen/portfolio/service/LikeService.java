@@ -7,10 +7,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LikeService {
-    private final LikeRepository repo;
 
-    public LikeService(LikeRepository repo) {
+    private final LikeRepository repo;
+    private final NotificationService notificationService;
+
+    public LikeService(LikeRepository repo, NotificationService notificationService) {
         this.repo = repo;
+        this.notificationService = notificationService;
     }
 
     public long getCount() {
@@ -21,11 +24,13 @@ public class LikeService {
     public long toggleLike(String userIdentifier) {
         return repo.findByUserIdentifier(userIdentifier)
                 .map(existing -> {
-                    repo.delete(existing); // 👎 Unlike
+                    repo.delete(existing);
+                    notificationService.create("👎 A user unliked a blog", "BLOG_UNLIKED");
                     return repo.count();
                 })
                 .orElseGet(() -> {
-                    repo.save(new Like(userIdentifier)); // 👍 Like
+                    repo.save(new Like(userIdentifier));
+                    notificationService.create("👍 A user liked a blog", "BLOG_LIKED");
                     return repo.count();
                 });
     }
