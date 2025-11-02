@@ -13,24 +13,23 @@ public class CorsConfig {
 
     @Bean
     public CorsFilter corsFilter() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of(
-                "http://localhost:4200",
-                "https://naveen-portfolio.vercel.app",
-                "https://www.naveenlingala.online"
+        CorsConfiguration cors = new CorsConfiguration();
+        cors.setAllowCredentials(true);
+        cors.setAllowedOrigins(List.of(
+                "https://www.naveenlingala.online",  // ✅ Production frontend
+                "http://localhost:4200"              // ✅ Local development
         ));
-        config.setAllowedHeaders(List.of(
+        cors.setAllowedHeaders(List.of(
                 "Origin", "Content-Type", "Accept", "Authorization",
                 "X-Requested-With", "Access-Control-Request-Method", "Access-Control-Request-Headers"
         ));
-        config.setExposedHeaders(List.of("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        config.setMaxAge(3600L);
+        cors.setExposedHeaders(List.of(
+                "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"
+        ));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
+        source.registerCorsConfiguration("/**", cors);
         return new CorsFilter(source);
     }
 }
