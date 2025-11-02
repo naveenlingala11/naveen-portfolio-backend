@@ -16,8 +16,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(List.of(
-                "http://localhost:4200",   // Angular dev
-                "https://naveen-portfolio.vercel.app" // Production frontend (Vercel)
+                "http://localhost:4200",
+                "https://naveen-portfolio.vercel.app",
+                "https://www.naveenlingala.online"
         ));
         config.setAllowedHeaders(List.of(
                 "Origin", "Content-Type", "Accept", "Authorization",
