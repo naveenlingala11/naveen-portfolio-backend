@@ -9,9 +9,11 @@ import java.util.List;
 public class NotificationService {
 
     private final NotificationRepository repo;
+    private final MailService mailService;
 
-    public NotificationService(NotificationRepository repo) {
+    public NotificationService(NotificationRepository repo, MailService mailService) {
         this.repo = repo;
+        this.mailService = mailService;
     }
 
     public List<Notification> getAll() {
@@ -46,5 +48,17 @@ public class NotificationService {
                 .orElseThrow(() -> new RuntimeException("Notification not found"));
         notif.setRead(false);
         repo.save(notif);
+    }
+
+    public Notification create(Notification n) {
+        Notification saved = repo.save(n);
+
+        // 📨 Send email for every new notification
+        mailService.sendNotificationEmail(
+                "🔔 New Notification: " + n.getType(),
+                n.getMessage() + "\n\nTime: " + n.getTimestamp()
+        );
+
+        return saved;
     }
 }

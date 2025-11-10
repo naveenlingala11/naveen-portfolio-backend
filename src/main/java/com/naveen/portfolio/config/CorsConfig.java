@@ -26,7 +26,8 @@ public class CorsConfig {
         cors.setExposedHeaders(List.of(
                 "Access-Control-Allow-Origin", "Access-Control-Allow-Credentials"
         ));
-        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        cors.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        System.out.println("✅ CORS filter applied: " + cors.getAllowedMethods());
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", cors);
